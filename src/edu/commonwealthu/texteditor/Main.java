@@ -1,6 +1,7 @@
 package edu.commonwealthu.texteditor;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -13,6 +14,8 @@ import javafx.stage.Stage;
 import javafx.scene.control.TextArea;
 
 public class Main extends Application {
+
+    private double zoom = 14;
 
     @Override
     public void start(Stage stage) {
@@ -45,11 +48,11 @@ public class Main extends Application {
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(
                 createFileMenu(fileManager),
-                createEditMenu(textArea)
+                createEditMenu(textArea),
+                createViewMenu(textArea)
         );
         return menuBar;
     }
-
 
     private Menu createFileMenu(FileManager fm){
         Menu fileMenu = new Menu("File");
@@ -100,6 +103,38 @@ public class Main extends Application {
         editMenu.getItems().addAll(undoItem, redoItem, cutItem, copyItem, pasteItem);
 
         return editMenu;
+    }
+
+    private Menu createViewMenu(TextArea textArea){
+        Menu viewMenu = new Menu("View");
+
+        MenuItem zoomInItem = new MenuItem("Zoom In");
+        MenuItem zoomOutItem = new MenuItem("Zoom Out");
+        MenuItem resetZoomItem = new MenuItem("Reset Zoom");
+
+        zoomInItem.setAccelerator(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
+        zoomOutItem.setAccelerator(new KeyCodeCombination(KeyCode.MINUS, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
+
+        zoomInItem.setOnAction(ActionEvent -> zoomIn(textArea));
+        zoomOutItem.setOnAction(ActionEvent -> zoomOut(textArea));
+        resetZoomItem.setOnAction(ActionEvent -> resetZoom(textArea));
+
+        viewMenu.getItems().addAll(zoomInItem, zoomOutItem, resetZoomItem);
+
+        return viewMenu;
+    }
+
+    private void zoomIn(TextArea textArea){
+        zoom += 2;
+        textArea.setStyle("-fx-font-size: " + zoom + "px;");
+    }
+    private void zoomOut(TextArea textArea){
+        zoom -= 2;
+        textArea.setStyle("-fx-font-size: " + zoom + "px;");
+    }
+    private void resetZoom(TextArea textArea){
+        zoom = 14;
+        textArea.setStyle("-fx-font-size: " + zoom + "px;");
     }
 
     public static void main(String[] args) {
