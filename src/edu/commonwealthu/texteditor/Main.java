@@ -28,7 +28,7 @@ public class Main extends Application {
 
         stage.setOnCloseRequest(event -> {
             event.consume();      // prevent automatic closing
-            fileManager.exit();   // run your unsaved-changes logic
+            fileManager.exit();   // run unsaved-changes logic
         });
 
         root.setTop(createMenuBar(textArea, fileManager));
