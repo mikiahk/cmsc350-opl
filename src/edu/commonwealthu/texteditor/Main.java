@@ -21,10 +21,15 @@ public class Main extends Application {
 
         TextArea textArea = createTextArea();
         root.setCenter(textArea);
+        FileManager fileManager = new FileManager(textArea, stage);
+        root.setTop(createMenuBar(textArea, fileManager));
 
-        root.setTop(createMenuBar(textArea));
 
         Scene scene = new Scene(root, 900, 600);
+
+
+        root.setTop(createMenuBar(textArea, fileManager));
+
 
         stage.setTitle("Text Editor - Untitled");
         stage.setScene(scene);
@@ -37,20 +42,32 @@ public class Main extends Application {
         return textArea;
     }
 
-    private MenuBar createMenuBar(TextArea textArea){
+    private MenuBar createMenuBar(TextArea textArea, FileManager fileManager) {
         MenuBar menuBar = new MenuBar();
-        Menu fileMenu = createFileMenu();
-        Menu editMenu = createEditMenu(textArea);
-        menuBar.getMenus().addAll(fileMenu, editMenu);
+        menuBar.getMenus().addAll(
+                createFileMenu(fileManager),
+                createEditMenu(textArea)
+        );
         return menuBar;
     }
 
-    private Menu createFileMenu(){
+
+    private Menu createFileMenu(FileManager fm){
         Menu fileMenu = new Menu("File");
 
-        // add ur functionality here
-        // add arguments as needed
+        MenuItem newItem = new MenuItem("New");
+        MenuItem openItem = new MenuItem("Open");
+        MenuItem saveItem = new MenuItem("Save");
+        MenuItem saveAsItem = new MenuItem("Save As");
+        MenuItem exitItem = new MenuItem("Exit");
 
+        newItem.setOnAction(e -> fm.newFile());
+        openItem.setOnAction(e -> fm.openFile());
+        saveItem.setOnAction(e -> fm.saveFile());
+        saveAsItem.setOnAction(e -> fm.saveAs());
+        exitItem.setOnAction(e -> fm.exit());
+
+        fileMenu.getItems().addAll(newItem, openItem, saveItem, saveAsItem, exitItem);
         return fileMenu;
     }
 
