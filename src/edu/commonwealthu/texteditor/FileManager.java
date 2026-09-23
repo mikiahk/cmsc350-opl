@@ -1,7 +1,4 @@
 package edu.commonwealthu.texteditor;
-/**
- * @author Blake Dotterer
- */
 
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -19,7 +16,7 @@ public class FileManager {
     private final Stage stage;
 
     private File currentFile = null;
-    private String lastSavedText = "";
+    private boolean modified = false;
 
     private final FileChooser chooser;
 
@@ -27,20 +24,31 @@ public class FileManager {
         this.textArea = textArea;
         this.stage = stage;
 
+        this.textArea.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!modified) {
+                modified = true;
+                updateTitle();
+            }
+        });
+
         chooser = new FileChooser();
-        chooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Text Files", "*.txt")
-        );
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+        chooser.setInitialFileName("Untitled.txt");
     }
 
-    //Check unsaved changes
-    public boolean hasUnsavedChanges() {
-        return !textArea.getText().equals(lastSavedText);
+    // Updates title and shows * if modified
+    private void updateTitle() {
+        String fileName, title;
+        if(currentFile == null) fileName = "Untitled";
+        else fileName = currentFile.getName();
+        if(modified) title = "Text Editor - *" + fileName;
+        else title = "Text Editor - " + fileName;
+        stage.setTitle(title);
     }
 
     //Prompt user to save unsaved changes
     public boolean promptSaveIfNeeded() {
-        if (!hasUnsavedChanges()) return true;
+        if (!modified) return true;
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Unsaved Changes");
@@ -70,8 +78,8 @@ public class FileManager {
 
         textArea.clear();
         currentFile = null;
-        lastSavedText = "";
-        stage.setTitle("Text Editor - Untitled");
+        modified = false;
+        updateTitle();
     }
 
     // Open File
@@ -85,8 +93,8 @@ public class FileManager {
             String content = Files.readString(file.toPath());
             textArea.setText(content);
             currentFile = file;
-            lastSavedText = content;
-            stage.setTitle("Text Editor - " + file.getName());
+            modified = false;
+            updateTitle();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -102,8 +110,8 @@ public class FileManager {
             }
 
             Files.writeString(currentFile.toPath(), textArea.getText());
-            lastSavedText = textArea.getText();
-            stage.setTitle("Text Editor - " + currentFile.getName());
+            modified = false;
+            updateTitle();
             return true;
 
         } catch (Exception ex) {
@@ -120,8 +128,8 @@ public class FileManager {
         try {
             Files.writeString(file.toPath(), textArea.getText());
             currentFile = file;
-            lastSavedText = textArea.getText();
-            stage.setTitle("Text Editor - " + file.getName());
+            modified = false;
+            updateTitle();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

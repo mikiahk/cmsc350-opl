@@ -22,17 +22,14 @@ public class Main extends Application {
         TextArea textArea = createTextArea();
         root.setCenter(textArea);
         FileManager fileManager = new FileManager(textArea, stage);
-        root.setTop(createMenuBar(textArea, fileManager));
-
-        Scene scene = new Scene(root, 900, 600);
 
         stage.setOnCloseRequest(event -> {
             event.consume();      // prevent automatic closing
             fileManager.exit();   // run unsaved-changes logic
         });
 
+        Scene scene = new Scene(root, 900, 600);
         root.setTop(createMenuBar(textArea, fileManager));
-
         stage.setTitle("Text Editor - Untitled");
         stage.setScene(scene);
         stage.show();
@@ -62,6 +59,12 @@ public class Main extends Application {
         MenuItem saveItem = new MenuItem("Save");
         MenuItem saveAsItem = new MenuItem("Save As");
         MenuItem exitItem = new MenuItem("Exit");
+
+        newItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
+        openItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
+        saveItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
+        saveAsItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN, KeyCombination.ALT_DOWN));
+        exitItem.setAccelerator(new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN));
 
         newItem.setOnAction(e -> fm.newFile());
         openItem.setOnAction(e -> fm.openFile());
