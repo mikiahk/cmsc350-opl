@@ -37,12 +37,14 @@ public class Main extends Application {
         stage.show();
     }
 
+    // Creates the editable text area
     private TextArea createTextArea(){
         TextArea textArea = new TextArea();
         textArea.setEditable(true);
         return textArea;
     }
 
+    // Creates the menu bar and adds specified tabs
     private MenuBar createMenuBar(TextArea textArea, FileManager fileManager) {
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(
@@ -53,6 +55,7 @@ public class Main extends Application {
         return menuBar;
     }
 
+    // Creates the file menu item
     private Menu createFileMenu(FileManager fm){
         Menu fileMenu = new Menu("File");
 
@@ -78,6 +81,7 @@ public class Main extends Application {
         return fileMenu;
     }
 
+    // Creates the edit menu item
     private Menu createEditMenu(TextArea textArea){
         Menu editMenu = new Menu("Edit");
 
@@ -104,6 +108,7 @@ public class Main extends Application {
         return editMenu;
     }
 
+    // Creates the view menu item
     private Menu createViewMenu(TextArea textArea){
         Menu viewMenu = new Menu("View");
 
@@ -123,14 +128,19 @@ public class Main extends Application {
         return viewMenu;
     }
 
+    // Zooms the text area in
     private void zoomIn(TextArea textArea){
         zoom += 2;
         textArea.setStyle("-fx-font-size: " + zoom + "px;");
     }
+
+    // Zooms the text area out
     private void zoomOut(TextArea textArea){
         zoom -= 2;
         textArea.setStyle("-fx-font-size: " + zoom + "px;");
     }
+
+    // Resets the zoom to specified default
     private void resetZoom(TextArea textArea){
         zoom = 14;
         textArea.setStyle("-fx-font-size: " + zoom + "px;");
