@@ -83,11 +83,8 @@ src/edu/commonwealthu/
 
 # Git Workflow
 
-## Do Not Work Directly on `main`
 
-The `main` branch should contain the stable version of the project.
-
-Create a separate branch for your work.
+Creating a separate branch for your work can be beneficial.
 
 First, make sure your local copy is up to date:
 
@@ -154,7 +151,7 @@ your-branch-name → main
 
 Have another team member review the changes before merging them into `main`.
 
-## Getting Other Team Members' Changes
+## Catching up with main
 
 Before starting new work:
 
