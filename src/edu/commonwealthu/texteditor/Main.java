@@ -24,12 +24,14 @@ public class Main extends Application {
         FileManager fileManager = new FileManager(textArea, stage);
         root.setTop(createMenuBar(textArea, fileManager));
 
-
         Scene scene = new Scene(root, 900, 600);
 
+        stage.setOnCloseRequest(event -> {
+            event.consume();      // prevent automatic closing
+            fileManager.exit();   // run your unsaved-changes logic
+        });
 
         root.setTop(createMenuBar(textArea, fileManager));
-
 
         stage.setTitle("Text Editor - Untitled");
         stage.setScene(scene);
