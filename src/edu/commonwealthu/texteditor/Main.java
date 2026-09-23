@@ -130,13 +130,17 @@ public class Main extends Application {
 
     // Zooms the text area in
     private void zoomIn(TextArea textArea){
-        zoom += 2;
+        if(zoom < 100){
+            zoom += 2;
+        }else return;
         textArea.setStyle("-fx-font-size: " + zoom + "px;");
     }
 
     // Zooms the text area out
     private void zoomOut(TextArea textArea){
-        zoom -= 2;
+        if(zoom > 2){
+            zoom -= 2;
+        }else return;
         textArea.setStyle("-fx-font-size: " + zoom + "px;");
     }
 
