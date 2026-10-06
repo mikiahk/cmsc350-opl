@@ -1,5 +1,6 @@
 package edu.commonwealthu.texteditor;
 
+import edu.commonwealthu.scanner.Scanner;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -15,14 +16,18 @@ import javafx.scene.control.TextArea;
 public class Main extends Application {
 
     private double zoom = 14;
+    private TextArea textArea;
+    private TextArea terminal;
 
     @Override
     public void start(Stage stage) {
 
         BorderPane root = new BorderPane();
 
-        TextArea textArea = createTextArea();
+        textArea = createTextArea();
         root.setCenter(textArea);
+        terminal = createTerminal();
+        root.setBottom(terminal);
         FileManager fileManager = new FileManager(textArea, stage);
 
         stage.setOnCloseRequest(event -> {
@@ -39,9 +44,22 @@ public class Main extends Application {
 
     // Creates the editable text area
     private TextArea createTextArea(){
-        TextArea textArea = new TextArea();
+        textArea = new TextArea();
         textArea.setEditable(true);
         return textArea;
+    }
+
+    private TextArea createTerminal(){
+        terminal = new TextArea();
+        terminal.setEditable(false);
+
+        terminal.setStyle(
+                "-fx-control-inner-background: #000000; " +
+                "-fx-font-family: 'Comic Sans MS'; " +
+                "-fx-font-size: 14px;"
+        );
+
+        return terminal;
     }
 
     // Creates the menu bar and adds specified tabs
@@ -50,7 +68,8 @@ public class Main extends Application {
         menuBar.getMenus().addAll(
                 createFileMenu(fileManager),
                 createEditMenu(textArea),
-                createViewMenu(textArea)
+                createViewMenu(textArea),
+                createRunMenu()
         );
         return menuBar;
     }
@@ -126,6 +145,23 @@ public class Main extends Application {
         viewMenu.getItems().addAll(zoomInItem, zoomOutItem, resetZoomItem);
 
         return viewMenu;
+    }
+
+    // Creates the run menu item
+    private Menu createRunMenu() {
+        Menu runMenu = new Menu("Run");
+
+        // could change this title, wasn't sure what to name it - KF
+        MenuItem runItem = new MenuItem("Compile");
+
+        runItem.setOnAction(ActionEvent -> compile());
+
+        return runMenu;
+    }
+
+    private void compile() {
+        String text = textArea.getText();
+        Scanner scanner = new Scanner(text);
     }
 
     // Zooms the text area in
