@@ -17,7 +17,7 @@ public class Test {
                 cmplx num
                 """;
 
-        Scanner scanner = new Scanner( source );
+        TokenScanner scanner = new TokenScanner(source);
         List<Token> tokens = scanner.scanTokens();
 
         for(Token t: tokens){

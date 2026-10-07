@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author Mikiah Kline
  */
-public class Scanner {
+public class TokenScanner {
     private final String source;
     private final List<Token> tokens = new ArrayList<>();
 
@@ -16,7 +16,7 @@ public class Scanner {
     private int current = 0; // current position in source
 
 
-    public Scanner(String source){
+    public TokenScanner(String source){
         this.source = source;
     }
 
