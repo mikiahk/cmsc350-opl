@@ -62,6 +62,15 @@ public class TokenScanner {
             case "float" -> TokenType.FLOAT;
             case "bool" -> TokenType.BOOL;
             case "cmplx" -> TokenType.CMPLX;
+
+            //built in functions
+            case "det" -> TokenType.DET;
+            case "sqrt" -> TokenType.SQRT;
+            case "trans" -> TokenType.TRANS;
+            case "inv" -> TokenType.INV;
+            case "len" -> TokenType.LEN;
+            case "rand" -> TokenType.RAND;
+
             default -> TokenType.IDENTIFIER;
         };
 

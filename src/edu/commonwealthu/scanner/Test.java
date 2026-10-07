@@ -15,6 +15,13 @@ public class Test {
                 float pi
                 bool flag
                 cmplx num
+                det
+                sqrt
+                trans
+                inv
+                len
+                rand
+                mydet
                 """;
 
         TokenScanner scanner = new TokenScanner(source);
