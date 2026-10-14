@@ -15,9 +15,16 @@ public class Test {
                 float pi = 3.14 
                 bool flag
                 cmplx num
+                det
+                sqrt
+                trans
+                inv
+                len
+                rand
+                mydet
                 """;
 
-        Scanner scanner = new Scanner( source );
+        TokenScanner scanner = new TokenScanner(source);
         List<Token> tokens = scanner.scanTokens();
 
         for(Token t: tokens){

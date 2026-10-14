@@ -1,5 +1,7 @@
 package edu.commonwealthu.texteditor;
 
+import edu.commonwealthu.scanner.Token;
+import edu.commonwealthu.scanner.TokenScanner;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -12,6 +14,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.scene.control.TextArea;
 
+import java.util.List;
+
 public class Main extends Application {
 
     private double zoom = 14;
@@ -21,8 +25,12 @@ public class Main extends Application {
 
         BorderPane root = new BorderPane();
 
-        TextArea textArea = createTextArea();
+        TextArea textArea = new TextArea();
+        textArea = createTextArea(textArea);
         root.setCenter(textArea);
+        TextArea terminal = new TextArea();
+        terminal = createTerminal(terminal);
+        root.setBottom(terminal);
         FileManager fileManager = new FileManager(textArea, stage);
 
         stage.setOnCloseRequest(event -> {
@@ -31,26 +39,41 @@ public class Main extends Application {
         });
 
         Scene scene = new Scene(root, 900, 600);
-        root.setTop(createMenuBar(textArea, fileManager));
+        root.setTop(createMenuBar(textArea, terminal, fileManager));
         stage.setTitle("Text Editor - Untitled");
         stage.setScene(scene);
         stage.show();
     }
 
     // Creates the editable text area
-    private TextArea createTextArea(){
-        TextArea textArea = new TextArea();
+    private TextArea createTextArea(TextArea textArea){
+        textArea = new TextArea();
         textArea.setEditable(true);
         return textArea;
     }
 
+    private TextArea createTerminal(TextArea terminal){
+        terminal = new TextArea();
+        terminal.setEditable(false);
+        terminal.setWrapText(true);
+
+        terminal.setStyle(
+                "-fx-control-inner-background: #000000; " +
+                "-fx-font-family: 'Comic Sans MS'; " +
+                "-fx-font-size: 14px;"
+        );
+
+        return terminal;
+    }
+
     // Creates the menu bar and adds specified tabs
-    private MenuBar createMenuBar(TextArea textArea, FileManager fileManager) {
+    private MenuBar createMenuBar(TextArea textArea, TextArea terminal, FileManager fileManager) {
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(
                 createFileMenu(fileManager),
                 createEditMenu(textArea),
-                createViewMenu(textArea)
+                createViewMenu(textArea),
+                createRunMenu(textArea, terminal)
         );
         return menuBar;
     }
@@ -126,6 +149,24 @@ public class Main extends Application {
         viewMenu.getItems().addAll(zoomInItem, zoomOutItem, resetZoomItem);
 
         return viewMenu;
+    }
+
+    // Creates the run menu item
+    private Menu createRunMenu(TextArea textArea, TextArea terminal) {
+        Menu runMenu = new Menu("Run");
+
+        // could change this title, wasn't sure what to name it - KF
+        MenuItem runItem = new MenuItem("Compile");
+
+        runItem.setOnAction(ActionEvent -> compile(textArea, terminal));
+
+        runMenu.getItems().add(runItem);
+
+        return runMenu;
+    }
+
+    private void compile(TextArea textArea, TextArea terminal) {
+        terminal.setText(new TokenScanner(textArea.getText()).scanTokens().toString());
     }
 
     // Zooms the text area in

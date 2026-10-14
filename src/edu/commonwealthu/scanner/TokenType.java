@@ -32,6 +32,14 @@ public enum TokenType {
     RBRACKET,
     COMMA,
 
+    //built in functions
+    DET,
+    SQRT,
+    TRANS,
+    INV,
+    LEN,
+    RAND,
+
     // End of input
     EOF
 }
