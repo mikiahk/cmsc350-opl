@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * contract
+ * Scanner
  *
  * @author Mikiah Kline
  */
@@ -45,11 +45,28 @@ public class Scanner {
             identifier();
             return;
         }
+
+        if(Character.isDigit(c)){
+            number();
+            return;
+        }
+
+        switch(c){
+            case '=' -> tokens.add(new Token(TokenType.ASSIGN, "="));
+            case '(' -> tokens.add(new Token(TokenType.LPAREN, "("));
+            case ')' -> tokens.add(new Token(TokenType.RPAREN, ")"));
+            case '[' -> tokens.add(new Token(TokenType.LBRACKET, "["));
+            case ']' -> tokens.add(new Token(TokenType.RBRACKET, "]"));
+            case ',' -> tokens.add(new Token(TokenType.COMMA, ","));
+            default -> System.out.println("Unexpected character: " + c);
+        }
     }
+
+
 
     private void identifier(){
         // continue reading letters and numbers until eof
-        while(!isAtEnd() && Character.isLetterOrDigit(peek())){
+        while(!isAtEnd() && Character.isLetterOrDigit(peek()) || peek() == '_'){
             advance();
         }
         // get full substring of what we just read
@@ -62,10 +79,33 @@ public class Scanner {
             case "float" -> TokenType.FLOAT;
             case "bool" -> TokenType.BOOL;
             case "cmplx" -> TokenType.CMPLX;
+            case "true", "false" -> TokenType.BOOLEAN;
             default -> TokenType.IDENTIFIER;
         };
 
         tokens.add(new Token(type, text));
+    }
+
+    private void number(){
+        // Read all before decimal
+        while(!isAtEnd() && Character.isDigit(peek())){
+            advance();
+        }
+
+        // Read decimal and advance
+        if(!isAtEnd() && peek() == '.' && current + 1 < source.length() && Character.isDigit(source.charAt(current + 1))){
+            advance(); // Read decimal
+
+            while(!isAtEnd() && Character.isDigit(peek())){
+                advance();
+            }
+
+            tokens.add(new Token(TokenType.FLOATING_POINT, source.substring(start, current)));
+        }else{
+            tokens.add(new Token(TokenType.INTEGER, source.substring(start, current)));
+        }
+
+
     }
 
     // returns the current char and moves forward

@@ -11,8 +11,8 @@ public class Test {
     public static void main(String[] args){
         String source = """
                 mat x
-                int i
-                float pi
+                int i = 1
+                float pi = 3.14 
                 bool flag
                 cmplx num
                 """;
