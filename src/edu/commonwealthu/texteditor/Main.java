@@ -78,7 +78,6 @@ public class Main extends Application {
         );
         return menuBar;
     }
-
     // Creates the file menu item
     private Menu createFileMenu(FileManager fm){
         Menu fileMenu = new Menu("File");
@@ -167,22 +166,26 @@ public class Main extends Application {
         return runMenu;
     }
 
+    // Tokenize and send to terminal
     private void compile(TextArea textArea, TextArea terminal) {
         List<Token> tokens = new TokenScanner(textArea.getText()).scanTokens();
         String tape = "[";
         for(Token t : tokens){
-            if(t.getType() == TokenType.EOF) continue;
-
-            if(t.getType() == TokenType.ASSIGN){
-                tape += "= ";
-            }else {
-                tape += t.getType() + " ";
+            if(t.getType() == TokenType.EOF){
+                tape = tape.substring(0, tape.length() - 1) + "]"; // remove trailing space
+                continue;
             }
+            switch(t.getType()){
+                case ASSIGN -> tape += "= ";
+                case PLUS -> tape += "+ ";
+                case MINUS -> tape += "- ";
+                case DIVIDE -> tape += "/ ";
+                case MULTIPLY -> tape += "* ";
+                default -> tape += t.getType() + " ";
+            }
+
         }
-        tape += "]";
         terminal.setText(tape);
-
-
     }
 
     // Zooms the text area in

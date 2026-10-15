@@ -20,6 +20,7 @@ public class TokenScanner {
         this.source = source;
     }
 
+    // scans source and adds EOF token at the end
     public List<Token> scanTokens(){
         while (!isAtEnd()){
             scanToken();
@@ -41,11 +42,13 @@ public class TokenScanner {
             return;
         }
 
+        // tokenize variables
         if(Character.isLetter(c)){
             identifier();
             return;
         }
 
+        // tokenize numbers including negatives
         if(Character.isDigit(c) || (c == '-' && !isAtEnd() && Character.isDigit(peek()))){
             if(c == '-') advance();
             number();
@@ -57,7 +60,8 @@ public class TokenScanner {
             case '(', ')', '[', ']', '{', '}', ',' -> punctuation(c);
             case '+' -> tokens.add(new Token(TokenType.PLUS, "+"));
             case '-' -> tokens.add(new Token(TokenType.MINUS, "-"));
-            case '/' -> comment();
+            case '/' -> commentOrDivide();
+            case '*' -> tokens.add(new Token(TokenType.MULTIPLY, "*"));
             case '.' -> {
                 if(match('.')){
                     tokens.add(new Token(TokenType.RANGE, ".."));
@@ -69,22 +73,22 @@ public class TokenScanner {
         }
     }
 
-    private void comment(){
+    private void commentOrDivide(){
         if(match('/')){
             // skip single line comment if we read "//"
             while(!isAtEnd() && peek() != '\n') advance();
 
         }else if(match('*')){
             // multi line comment
-            while(!isAtEnd()){
-                if(peek() == '*' && match('*')){
-                    if(match('/')) return;
+            while(!isAtEnd()){ // keep looking if not eof
+                if(peek() == '*' && match('*')){ // check for closing
+                    if(match('/')) return; // exit comment consume
                 } else {
-                    advance();
+                    advance(); // ignore everything inside comment
                 }
             }
         }else{
-            errorChar('/');
+            tokens.add(new Token(TokenType.DIVIDE, "/"));
         }
     }
 

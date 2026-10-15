@@ -46,6 +46,8 @@ public enum TokenType {
     LESS_EQUAL,
     MINUS,
     PLUS,
+    DIVIDE,
+    MULTIPLY,
     RANGE,
 
     // Symbols
