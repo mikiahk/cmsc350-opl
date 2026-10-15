@@ -80,7 +80,8 @@ public class TokenScanner {
             case "bool" -> TokenType.BOOL;
             case "cmplx" -> TokenType.CMPLX;
 
-            case "true", "false" -> TokenType.BOOLEAN;
+            case "true" -> TokenType.TRUE;
+            case "false" -> TokenType.FALSE;
 
             case "det" -> TokenType.DET;
             case "sqrt" -> TokenType.SQRT;
@@ -88,8 +89,11 @@ public class TokenScanner {
             case "inv" -> TokenType.INV;
             case "len" -> TokenType.LEN;
             case "rand" -> TokenType.RAND;
+            case "if" -> TokenType.IF;
+            case "for" -> TokenType.FOR;
+            case "while" -> TokenType.WHILE;
 
-            default -> TokenType.IDENTIFIER;
+            default -> TokenType.ID;
         };
 
         tokens.add(new Token(type, text));
