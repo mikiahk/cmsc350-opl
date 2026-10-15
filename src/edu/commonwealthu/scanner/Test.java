@@ -57,7 +57,9 @@ public class Test {
                 """;
         String greaterequal = """
                 if(y >= 3){
-                    // do something
+                    //**
+                        do something
+                    */
                 }
                 """;
         String asign = """
@@ -71,9 +73,10 @@ public class Test {
                     cmplx p = (0,1)
                 }
                 """;
+
                 // [int id = num]
 
-        TokenScanner scanner = new TokenScanner(range);
+        TokenScanner scanner = new TokenScanner(greaterequal);
         List<Token> tokens = scanner.scanTokens();
 
         for(Token t: tokens){

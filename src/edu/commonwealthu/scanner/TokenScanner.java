@@ -53,23 +53,10 @@ public class TokenScanner {
 
         switch(c){
             case '=', '!', '<', '>' -> operator(c);
-            case '(' -> tokens.add(new Token(TokenType.LPAREN, "("));
-            case ')' -> tokens.add(new Token(TokenType.RPAREN, ")"));
-            case '[' -> tokens.add(new Token(TokenType.LBRACKET, "["));
-            case ']' -> tokens.add(new Token(TokenType.RBRACKET, "]"));
-            case '{' -> tokens.add(new Token(TokenType.LBRACE, "{"));
-            case '}' -> tokens.add(new Token(TokenType.RBRACE, "}"));
-            case ',' -> tokens.add(new Token(TokenType.COMMA, ","));
+            case '(', ')', '[', ']', '{', '}', ',' -> punctuation(c);
             case '+' -> tokens.add(new Token(TokenType.PLUS, "+"));
             case '-' -> tokens.add(new Token(TokenType.MINUS, "-"));
-            case '/' -> {
-                if(match('/')){
-                    while(!isAtEnd() && peek() != '\n') advance();
-
-                }else{
-                    errorChar(c);
-                }
-            }
+            case '/' -> comment();
             case '.' -> {
                 if(match('.')){
                     tokens.add(new Token(TokenType.RANGE, ".."));
@@ -78,6 +65,35 @@ public class TokenScanner {
                 }
             }
             default -> errorChar(c);
+        }
+    }
+
+    private void comment(){
+        if(match('/')){
+            while(!isAtEnd() && peek() != '\n') advance();
+
+        }else if(match('*')){
+            while(!isAtEnd()){
+                if(peek() == '*' && match('*')){
+                    if(match('/')) return;
+                } else {
+                    advance();
+                }
+            }
+        }else{
+            errorChar('/');
+        }
+    }
+
+    private void punctuation(char c){
+        switch(c){
+            case '(' -> tokens.add(new Token(TokenType.LPAREN, "("));
+            case ')' -> tokens.add(new Token(TokenType.RPAREN, ")"));
+            case '[' -> tokens.add(new Token(TokenType.LBRACKET, "["));
+            case ']' -> tokens.add(new Token(TokenType.RBRACKET, "]"));
+            case '{' -> tokens.add(new Token(TokenType.LBRACE, "{"));
+            case '}' -> tokens.add(new Token(TokenType.RBRACE, "}"));
+            case ',' -> tokens.add(new Token(TokenType.COMMA, ","));
         }
     }
 
@@ -142,17 +158,13 @@ public class TokenScanner {
 
     private void number(){
         // Read all before decimal
-        while(!isAtEnd() && Character.isDigit(peek())){
-            advance();
-        }
+        readDigits();
 
         // Read decimal and advance
         if(!isAtEnd() && peek() == '.' && current + 1 < source.length() && Character.isDigit(source.charAt(current + 1))){
             advance(); // Read decimal
 
-            while(!isAtEnd() && Character.isDigit(peek())){
-                advance();
-            }
+            readDigits();
 
             tokens.add(new Token(TokenType.FLOATING_POINT, source.substring(start, current)));
         }else{
@@ -160,6 +172,12 @@ public class TokenScanner {
         }
 
 
+    }
+
+    private void readDigits(){
+        while(!isAtEnd() && Character.isDigit(peek())){
+            advance();
+        }
     }
 
     private void errorChar(char c){
