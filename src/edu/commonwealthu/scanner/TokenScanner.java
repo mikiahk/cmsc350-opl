@@ -70,9 +70,11 @@ public class TokenScanner {
 
     private void comment(){
         if(match('/')){
+            // skip single line comment if we read "//"
             while(!isAtEnd() && peek() != '\n') advance();
 
         }else if(match('*')){
+            // multi line comment
             while(!isAtEnd()){
                 if(peek() == '*' && match('*')){
                     if(match('/')) return;

@@ -57,7 +57,7 @@ public class Test {
                 """;
         String greaterequal = """
                 if(y >= 3){
-                    //**
+                    /**
                         do something
                     */
                 }
