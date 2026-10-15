@@ -40,9 +40,28 @@ public class Test {
                 {
                 }
                 """;
+        String test2 = """
+                if(x==10){
+                    // do something
+                }
+                
+                if(y!=5){
+                    // do something
+                }
+                if(x <= 20){
+                    // do something
+                }
+                if(y >= 3){
+                    // do something
+                }
+                
+                if(x = 1){
+                    // parser should break this
+                }
+                """;
                 // [int id = num]
 
-        TokenScanner scanner = new TokenScanner(source);
+        TokenScanner scanner = new TokenScanner(test2);
         List<Token> tokens = scanner.scanTokens();
 
         for(Token t: tokens){

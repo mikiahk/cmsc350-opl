@@ -60,6 +60,16 @@ public class TokenScanner {
             case '{' -> tokens.add(new Token(TokenType.LBRACE, "{"));
             case '}' -> tokens.add(new Token(TokenType.RBRACE, "}"));
             case ',' -> tokens.add(new Token(TokenType.COMMA, ","));
+            case '+' -> tokens.add(new Token(TokenType.PLUS, "+"));
+            case '-' -> tokens.add(new Token(TokenType.MINUS, "-"));
+            case '/' ->{
+                if(match('/')){
+                    while(!isAtEnd() && peek() != '\n') advance();
+
+                }else{
+                    System.out.println("Unexpected character: " + c);
+                }
+            }
             default -> System.out.println("Unexpected character: " + c);
         }
     }
