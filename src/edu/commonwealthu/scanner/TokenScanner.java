@@ -52,21 +52,45 @@ public class TokenScanner {
         }
 
         switch(c){
-            case '=' -> tokens.add(new Token(TokenType.ASSIGN, "="));
+            case '=', '!', '<', '>' -> operator(c);
             case '(' -> tokens.add(new Token(TokenType.LPAREN, "("));
             case ')' -> tokens.add(new Token(TokenType.RPAREN, ")"));
             case '[' -> tokens.add(new Token(TokenType.LBRACKET, "["));
             case ']' -> tokens.add(new Token(TokenType.RBRACKET, "]"));
+            case '{' -> tokens.add(new Token(TokenType.LBRACE, "{"));
+            case '}' -> tokens.add(new Token(TokenType.RBRACE, "}"));
             case ',' -> tokens.add(new Token(TokenType.COMMA, ","));
             default -> System.out.println("Unexpected character: " + c);
         }
     }
 
+    private void operator(char c){
+        if(match('=')){
+            switch (c){
+                case '=' -> tokens.add(new Token(TokenType.EQUAL_EQUAL, "=="));
+                case '!' -> tokens.add(new Token(TokenType.NOT_EQUAL, "!="));
+                case '<' -> tokens.add(new Token(TokenType.LESS_EQUAL, "<="));
+                case '>' -> tokens.add(new Token(TokenType.GREATER_EQUAL, ">="));
+            }
+        }else{
+            switch(c){
+                case '=' -> tokens.add(new Token(TokenType.ASSIGN, "="));
+                case '<' -> tokens.add(new Token(TokenType.LESS, "<"));
+                case '>' -> tokens.add(new Token(TokenType.GREATER, ">"));
+                case '!' -> System.out.println("Unexpected character: " + c);
+            }
+        }
+    }
 
+    private boolean match(char c){
+        if(isAtEnd() || source.charAt(current) != c) return false;
+        current++;
+        return true;
+    }
 
     private void identifier(){
         // continue reading letters and numbers until eof
-        while(!isAtEnd() && Character.isLetterOrDigit(peek()) || peek() == '_'){
+        while(!isAtEnd() && (Character.isLetterOrDigit(peek()) || peek() == '_')){
             advance();
         }
         // get full substring of what we just read
