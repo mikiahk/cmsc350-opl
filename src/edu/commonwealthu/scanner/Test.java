@@ -22,7 +22,25 @@ public class Test {
                 len
                 rand
                 mydet
+                mat x = [0 -1 0, -1 2 -1,0 -1 0]
+                int i = 10
+                float f = 3.14
+                bool b = true
+                if(x==y)
+                {
+                    mat p = [208 145 15 58]
+                }
+                
+                for(i=1...n)
+                {
+                    cmplx p = (0,1)
+                }
+                
+                while(x>10)
+                {
+                }
                 """;
+                // [int id = num]
 
         TokenScanner scanner = new TokenScanner(source);
         List<Token> tokens = scanner.scanTokens();
