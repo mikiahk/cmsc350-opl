@@ -2,6 +2,7 @@ package edu.commonwealthu.texteditor;
 
 import edu.commonwealthu.scanner.Token;
 import edu.commonwealthu.scanner.TokenScanner;
+import edu.commonwealthu.scanner.TokenType;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -158,6 +159,7 @@ public class Main extends Application {
         // could change this title, wasn't sure what to name it - KF
         MenuItem runItem = new MenuItem("Compile");
 
+        runItem.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
         runItem.setOnAction(ActionEvent -> compile(textArea, terminal));
 
         runMenu.getItems().add(runItem);
@@ -166,7 +168,21 @@ public class Main extends Application {
     }
 
     private void compile(TextArea textArea, TextArea terminal) {
-        terminal.setText(new TokenScanner(textArea.getText()).scanTokens().toString());
+        List<Token> tokens = new TokenScanner(textArea.getText()).scanTokens();
+        String tape = "[";
+        for(Token t : tokens){
+            if(t.getType() == TokenType.EOF) continue;
+
+            if(t.getType() == TokenType.ASSIGN){
+                tape += "= ";
+            }else {
+                tape += t.getType() + " ";
+            }
+        }
+        tape += "]";
+        terminal.setText(tape);
+
+
     }
 
     // Zooms the text area in

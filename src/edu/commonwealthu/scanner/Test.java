@@ -73,10 +73,13 @@ public class Test {
                     cmplx p = (0,1)
                 }
                 """;
+        String negnum = """
+                int x = -10;
+                """;
 
                 // [int id = num]
 
-        TokenScanner scanner = new TokenScanner(greaterequal);
+        TokenScanner scanner = new TokenScanner(negnum);
         List<Token> tokens = scanner.scanTokens();
 
         for(Token t: tokens){

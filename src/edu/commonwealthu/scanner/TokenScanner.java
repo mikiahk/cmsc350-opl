@@ -46,7 +46,8 @@ public class TokenScanner {
             return;
         }
 
-        if(Character.isDigit(c)){
+        if(Character.isDigit(c) || (c == '-' && !isAtEnd() && Character.isDigit(peek()))){
+            if(c == '-') advance();
             number();
             return;
         }
