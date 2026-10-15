@@ -62,15 +62,22 @@ public class TokenScanner {
             case ',' -> tokens.add(new Token(TokenType.COMMA, ","));
             case '+' -> tokens.add(new Token(TokenType.PLUS, "+"));
             case '-' -> tokens.add(new Token(TokenType.MINUS, "-"));
-            case '/' ->{
+            case '/' -> {
                 if(match('/')){
                     while(!isAtEnd() && peek() != '\n') advance();
 
                 }else{
-                    System.out.println("Unexpected character: " + c);
+                    errorChar(c);
                 }
             }
-            default -> System.out.println("Unexpected character: " + c);
+            case '.' -> {
+                if(match('.')){
+                    tokens.add(new Token(TokenType.RANGE, ".."));
+                }else{
+                    errorChar(c);
+                }
+            }
+            default -> errorChar(c);
         }
     }
 
@@ -87,7 +94,7 @@ public class TokenScanner {
                 case '=' -> tokens.add(new Token(TokenType.ASSIGN, "="));
                 case '<' -> tokens.add(new Token(TokenType.LESS, "<"));
                 case '>' -> tokens.add(new Token(TokenType.GREATER, ">"));
-                case '!' -> System.out.println("Unexpected character: " + c);
+                case '!' -> errorChar(c);
             }
         }
     }
@@ -153,6 +160,10 @@ public class TokenScanner {
         }
 
 
+    }
+
+    private void errorChar(char c){
+        System.out.println("Unexpected character: " + c);
     }
 
     // returns the current char and moves forward

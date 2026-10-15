@@ -40,28 +40,40 @@ public class Test {
                 {
                 }
                 """;
-        String test2 = """
+        String equality = """
                 if(x==10){
                     // do something
                 }
-                
+                """;
+        String notequal = """
                 if(y!=5){
                     // do something
                 }
+                """;
+        String lessequal = """
                 if(x <= 20){
                     // do something
                 }
+                """;
+        String greaterequal = """
                 if(y >= 3){
                     // do something
                 }
-                
+                """;
+        String asign = """
                 if(x = 1){
                     // parser should break this
                 }
                 """;
+        String range = """
+                for(i=1..end_range)
+                {
+                    cmplx p = (0,1)
+                }
+                """;
                 // [int id = num]
 
-        TokenScanner scanner = new TokenScanner(test2);
+        TokenScanner scanner = new TokenScanner(range);
         List<Token> tokens = scanner.scanTokens();
 
         for(Token t: tokens){
