@@ -60,7 +60,7 @@ public class Main extends Application {
         terminal.setWrapText(true);
 
         terminal.setStyle(
-                "-fx-control-inner-background: #000000; " +
+                "-fx-control-inner-background: #1e1e1e; " +
                 "-fx-font-size: 14px;"
         );
 
