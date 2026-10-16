@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Scanner
+ * Token Scanner
  *
  * @author Mikiah Kline
  */

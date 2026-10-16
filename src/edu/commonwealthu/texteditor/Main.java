@@ -53,6 +53,7 @@ public class Main extends Application {
         return textArea;
     }
 
+    // Creates the terminal output area
     private TextArea createTerminal(TextArea terminal){
         terminal = new TextArea();
         terminal.setEditable(false);
@@ -60,7 +61,6 @@ public class Main extends Application {
 
         terminal.setStyle(
                 "-fx-control-inner-background: #000000; " +
-                "-fx-font-family: 'Comic Sans MS'; " +
                 "-fx-font-size: 14px;"
         );
 
@@ -78,6 +78,7 @@ public class Main extends Application {
         );
         return menuBar;
     }
+
     // Creates the file menu item
     private Menu createFileMenu(FileManager fm){
         Menu fileMenu = new Menu("File");
@@ -155,7 +156,6 @@ public class Main extends Application {
     private Menu createRunMenu(TextArea textArea, TextArea terminal) {
         Menu runMenu = new Menu("Run");
 
-        // could change this title, wasn't sure what to name it - KF
         MenuItem runItem = new MenuItem("Compile");
 
         runItem.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN));
@@ -169,23 +169,12 @@ public class Main extends Application {
     // Tokenize and send to terminal
     private void compile(TextArea textArea, TextArea terminal) {
         List<Token> tokens = new TokenScanner(textArea.getText()).scanTokens();
-        String tape = "[";
+        String tape = "[";  // start tape
         for(Token t : tokens){
-            if(t.getType() == TokenType.EOF){
-                tape = tape.substring(0, tape.length() - 1) + "]"; // remove trailing space
-                continue;
-            }
-            switch(t.getType()){
-                case ASSIGN -> tape += "= ";
-                case PLUS -> tape += "+ ";
-                case MINUS -> tape += "- ";
-                case DIVIDE -> tape += "/ ";
-                case MULTIPLY -> tape += "* ";
-                default -> tape += t.getType() + " ";
-            }
-
+            if(t.getType() != TokenType.EOF)
+                tape += t;
         }
-        terminal.setText(tape);
+        terminal.setText(tape.substring(0, tape.length()-1) + "]"); // remove trailing space and end tape
     }
 
     // Zooms the text area in

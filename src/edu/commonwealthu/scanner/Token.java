@@ -1,23 +1,23 @@
 package edu.commonwealthu.scanner;
 
 /**
- * contract
+ * Token arrays
  *
  * @author Mikiah Kline
  */
 public class Token {
     private final TokenType type;
-    private final String tape;
+    private final String source;
 
     public Token(TokenType type, String tape){
         this.type = type;
-        this.tape = tape;
+        this.source = tape;
     }
 
     public TokenType getType(){return type;}
 
-    public String getTape(){return tape;}
+    public String getSource(){return source;}
 
     @Override
-    public String toString(){return type + " : " + tape;}
+    public String toString(){return type + " ";}
 }
